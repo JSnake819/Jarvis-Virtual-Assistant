@@ -43,6 +43,3 @@ except sr.UnknownValueError:
 except sr.RequestError as e:
     print("Could not request results from Jarvis's recognition service; {0}".format(e))
     activate("Say something sir,")
-
-print("Hello World")
-

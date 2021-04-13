@@ -49,5 +49,3 @@ def new_tab():
     engine.say("I will open a new tab in google sir.")
     engine.runAndWait()
     return print("I will open a new tab in google sir.")
-
-
