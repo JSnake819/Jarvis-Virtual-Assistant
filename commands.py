@@ -11,6 +11,7 @@ for word in sp_recog.input_list:
         while index < len(sp_recog.input_list):
             command = command + sp_recog.input_list[index] + " "
             index += 1
+dispatch()
             
 class Command:
     def __init__(self, name, keyword, phrase, function):
@@ -33,7 +34,7 @@ class Command:
 def first_president():
     engine.say("The first president is George Washington sir.")
     engine.runAndWait()
-    return print("The first president is George Washington sir.")
+    return print("The first president is George Washington sir."), main.dispatch()
 
 def repeat():
     phrase = sp_recog.activate("What do you want me to say?: ")
@@ -41,11 +42,11 @@ def repeat():
     # TEXT input("What do you want me to say?: ")
     engine.say(phrase)
     engine.runAndWait()
-    return print(phrase)
+    return print(phrase), dispatch()
 
 def new_tab():
     chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
     webbrowser.get(chrome_path).open('chrome://newtab')
     engine.say("I will open a new tab in google sir.")
     engine.runAndWait()
-    return print("I will open a new tab in google sir.")
+    return print("I will open a new tab in google sir."), dispatch()
