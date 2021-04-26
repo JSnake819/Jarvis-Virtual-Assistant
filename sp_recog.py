@@ -34,6 +34,12 @@ def new_tab():
     engine.runAndWait()
     return print("I will open a new tab in google sir."), read_input("What is it sir?:", "list")
 
+def stop():
+    engine.say("Ok, goodbye.")
+    engine.runAndWait()
+    print("Ok, goodbye")
+    return
+
 command = ""
 def find_command():
     global command
@@ -63,15 +69,19 @@ class Command:
                 repeat()
             if self.function == "new_tab":
                 new_tab()
+            if self.function == "stop":
+                stop()
 
 def dispatch():
     command1.respond()
-    command3.respond()
     command2.respond()
+    command3.respond()
+    command4.respond()
 
 command1 = Command("ask president", "Jarvis", "who is the first president", "first_president")
 command2 = Command("repeat", "Jarvis", "repeat after me", "repeat")
 command3 = Command("new tab", "Jarvis", "open a new tab", "new_tab")
+command4 = Command("stop running", "Jarvis", "stop running", "stop")
 
 try:
     # for testing purposes this is the default API key
