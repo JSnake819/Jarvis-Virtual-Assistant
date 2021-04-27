@@ -13,7 +13,7 @@ useVoice = True
 user_input = ""
 input_list = []
 command = ""
-def first_president():
+def firstPresident():
     engine.say("The first president is George Washington sir.")
     engine.runAndWait()
     return print("The first president is George Washington sir."), read_input("What is it sir?:", "list")
@@ -29,7 +29,7 @@ def repeat():
     engine.runAndWait()
     return print(phrase), read_input("What is it sir?:", "list")
 
-def new_tab():
+def newTab():
     chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
     webbrowser.get(chrome_path).open('chrome://newtab')
     engine.say("I will open a new tab in google sir.")
@@ -41,6 +41,45 @@ def stop():
     engine.runAndWait()
     print("Ok, goodbye.")
     sys.exit()
+
+def calculate():
+    try:
+        global user_input
+        if "plus" in user_input or "+" in user_input:
+            answer = float(input_list[3]) + float(input_list[5])
+            opWord = " plus "
+            op = " + "
+        if "minus" in user_input or "-" in user_input:
+            answer = float(input_list[3]) - float(input_list[5])
+            opWord = " minus "
+            op = " - "
+        if "times" in user_input or "*" in user_input:
+            answer = float(input_list[3]) * float(input_list[5])
+            opWord = " times "
+            op = " * "
+        if "divided by" in user_input or "/" in user_input:
+            answer = float(input_list[3]) / float(input_list[5])
+            opWord = " divided by "
+            op = " / "
+        if "to the power of" in user_input or "^" in user_input:
+            answer = int(input_list[3]) ^ int(input_list[5])
+            opWord = " to the power of "
+            op = " ^ "
+        answer = str(answer)
+        engine.say(input_list[3] + opWord + input_list[5] + " is equal to " + answer)
+        engine.runAndWait()
+        print(input_list[3] + op + input_list[5] + " = " + answer)
+    except ZeroDivisionError as err:
+        engine.say("You can not divide by zero stupid.")
+        engine.runAndWait()
+        print("You can not divide by zero stupid.")
+        read_input("What is it sir?: ", "list")
+    except ValueError:
+        engine.say("Sorry sir, I could not understand the equation. Try again.")
+        engine.runAndWait()
+        print("Sorry sir, I could not understand the equation. Try again.")
+        read_input("What is it sir?: ", "list")
+    return read_input("What is it sir: ", "list")
 
 command = ""
 def find_command():
@@ -63,28 +102,33 @@ class Command:
 #Every word after "Jarvis" will turn into the phrase
     def respond(self):
         global command
+        global user_input
         for phrase in self.phrase:
             command = ""
+            if "what is" in user_input:
+                calculate()
             if find_command() == phrase + " ":
                 if self.function == "first_president":
-                    first_president()
+                    firstPresident()
                 if self.function == "repeat":
                     repeat()
-                if self.function == "new_tab":
-                    new_tab()
+                if self.function == "newTab":
+                    newTab()
                 if self.function == "stop":
                     stop()
-
+                
 def dispatch():
     command1.respond()
     command2.respond()
     command3.respond()
     command4.respond()
+    read_input("What is it sir: ", "list")
 
 command1 = Command("ask president", "Jarvis", lists.firstPresident, "first_president")
 command2 = Command("repeat", "Jarvis", lists.repeat, "repeat")
-command3 = Command("new tab", "Jarvis", lists.newTab, "new_tab")
+command3 = Command("new tab", "Jarvis", lists.newTab, "newTab")
 command4 = Command("stop running", "Jarvis", lists.stop, "stop")
+command5 = Command("calulate", "Jarvis", lists.calculate, "calculate")
 
 try:
     # for testing purposes this is the default API key
