@@ -2,13 +2,12 @@ import speech_recognition as sr
 import pyttsx3
 import webbrowser
 import lists
+import sys
 engine = pyttsx3.init()
 engine.runAndWait()
 # log_file = open("log.txt", "r+")
-# r = sr.Recognizer()
-# with sr.Microphone() as source:
-#     print("Say something sir,")
-#     audio = r.listen(source)
+
+useVoice = True
 
 # recognize speech using Google Speech Recognition
 user_input = ""
@@ -20,7 +19,10 @@ def first_president():
     return print("The first president is George Washington sir."), read_input("What is it sir?:", "list")
 
 def repeat():
-    phrase = input("What do you want me to say?: ")
+    if useVoice == True:
+        phrase = read_input("What do you want me to say?: ", "text_end")
+    else:
+        phrase = input("What do you want me to say?: ")
     # VOICE read_input("What do you want me to say?: ", "text_end")
     # TEXT input("What do you want me to say?: ")
     engine.say(phrase)
@@ -38,7 +40,7 @@ def stop():
     engine.say("Ok, goodbye.")
     engine.runAndWait()
     print("Ok, goodbye.")
-    return
+    sys.exit()
 
 command = ""
 def find_command():
@@ -88,21 +90,24 @@ try:
     # for testing purposes this is the default API key
     # to use another API key, use `r.recognize_google(audio, key="GOOGLE_SPEECH_RECOGNITION_API_KEY")`
     # instead of `r.recognize_google(audio)`
-    def activate(ask):
+    def activateVoice(ask):
         global r
         global audio
         r = sr.Recognizer()
         with sr.Microphone() as source:
             print(ask)
             audio = r.listen(source)
-            read_input(ask, "text")
+            return r.recognize_google(audio)
 
     def read_input(ask, output):
         global r
         global audio
         global user_input
         global input_list
-        user_input = input(ask)
+        if useVoice == True:
+            user_input = activateVoice(ask)
+        else:
+            user_input = input(ask)
         # TEXT input(ask)
         # VOICE input = r.recognize_google(audio)
         input_list = user_input.split()
@@ -113,14 +118,17 @@ try:
             return input_list, dispatch()
         if output == "text_end":
             return user_input
-    read_input("What is it sir?: ", "list")
+    if useVoice == True:
+        read_input("Say something sir: ", "list")
+    else:
+        read_input("What is it sir?: ", "list")
 
 except sr.UnknownValueError:
     print("Jarvis could not understand audio")
-    activate("Say something sir,")
+    activateVoice("Say something sir: ")
 except sr.RequestError as e:
     print("Could not request results from Jarvis's recognition service; {0}".format(e))
-    activate("Say something sir,")
+    activateVoice("Say something sir: ")
 
 
 
