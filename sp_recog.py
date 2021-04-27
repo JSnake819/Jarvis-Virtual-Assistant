@@ -1,10 +1,10 @@
 import speech_recognition as sr
 import pyttsx3
 import webbrowser
+import lists
 engine = pyttsx3.init()
 engine.runAndWait()
 # log_file = open("log.txt", "r+")
-
 # r = sr.Recognizer()
 # with sr.Microphone() as source:
 #     print("Say something sir,")
@@ -21,7 +21,7 @@ def first_president():
 
 def repeat():
     phrase = input("What do you want me to say?: ")
-    # VOICE sp_recog.read_input("What do you want me to say?: ", "text")
+    # VOICE read_input("What do you want me to say?: ", "text_end")
     # TEXT input("What do you want me to say?: ")
     engine.say(phrase)
     engine.runAndWait()
@@ -37,7 +37,7 @@ def new_tab():
 def stop():
     engine.say("Ok, goodbye.")
     engine.runAndWait()
-    print("Ok, goodbye")
+    print("Ok, goodbye.")
     return
 
 command = ""
@@ -61,16 +61,17 @@ class Command:
 #Every word after "Jarvis" will turn into the phrase
     def respond(self):
         global command
-        command = ""
-        if find_command() == self.phrase + " ":
-            if self.function == "first_president":
-                first_president()
-            if self.function == "repeat":
-                repeat()
-            if self.function == "new_tab":
-                new_tab()
-            if self.function == "stop":
-                stop()
+        for phrase in self.phrase:
+            command = ""
+            if find_command() == phrase + " ":
+                if self.function == "first_president":
+                    first_president()
+                if self.function == "repeat":
+                    repeat()
+                if self.function == "new_tab":
+                    new_tab()
+                if self.function == "stop":
+                    stop()
 
 def dispatch():
     command1.respond()
@@ -78,10 +79,10 @@ def dispatch():
     command3.respond()
     command4.respond()
 
-command1 = Command("ask president", "Jarvis", "who is the first president", "first_president")
-command2 = Command("repeat", "Jarvis", "repeat after me", "repeat")
-command3 = Command("new tab", "Jarvis", "open a new tab", "new_tab")
-command4 = Command("stop running", "Jarvis", "stop running", "stop")
+command1 = Command("ask president", "Jarvis", lists.firstPresident, "first_president")
+command2 = Command("repeat", "Jarvis", lists.repeat, "repeat")
+command3 = Command("new tab", "Jarvis", lists.newTab, "new_tab")
+command4 = Command("stop running", "Jarvis", lists.stop, "stop")
 
 try:
     # for testing purposes this is the default API key
@@ -110,6 +111,8 @@ try:
             return user_input, dispatch()
         if output == "list":
             return input_list, dispatch()
+        if output == "text_end":
+            return user_input
     read_input("What is it sir?: ", "list")
 
 except sr.UnknownValueError:
