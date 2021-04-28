@@ -7,7 +7,7 @@ engine = pyttsx3.init()
 engine.runAndWait()
 # log_file = open("log.txt", "r+")
 
-useVoice = True
+useVoice = False
 
 # recognize speech using Google Speech Recognition
 user_input = ""
@@ -47,6 +47,7 @@ def calculate():
         global user_input
         if "plus" in user_input or "+" in user_input:
             answer = float(input_list[3]) + float(input_list[5])
+            answer = "%.4f" % answer
             opWord = " plus "
             op = " + "
         if "minus" in user_input or "-" in user_input:
@@ -81,7 +82,18 @@ def calculate():
         read_input("What is it sir?: ", "list")
     return read_input("What is it sir: ", "list")
 
+def search(phrase):
+    global user_input
+    user_input = user_input.replace("Jarvis " + phrase + " ", "")
+    search = user_input
+    webbrowser.open('https://www.google.com/search?q=' + search)
+    engine.say("Ok I will search for " + search)
+    engine.runAndWait()
+    print("Ok I will search for " + search)
+    return read_input("What is it sir: ", "list")
+
 command = ""
+
 def find_command():
     global command
     for word in input_list:
@@ -105,9 +117,7 @@ class Command:
         global user_input
         for phrase in self.phrase:
             command = ""
-            if "what is" in user_input:
-                calculate()
-            if find_command() == phrase + " ":
+            if phrase in find_command():
                 if self.function == "first_president":
                     firstPresident()
                 if self.function == "repeat":
@@ -116,12 +126,18 @@ class Command:
                     newTab()
                 if self.function == "stop":
                     stop()
+                if self.function == "calculate":
+                    calculate()
+                if self.function == "search":
+                    search(phrase)
                 
 def dispatch():
     command1.respond()
     command2.respond()
     command3.respond()
     command4.respond()
+    command5.respond()
+    command6.respond()
     read_input("What is it sir: ", "list")
 
 command1 = Command("ask president", "Jarvis", lists.firstPresident, "first_president")
@@ -129,6 +145,7 @@ command2 = Command("repeat", "Jarvis", lists.repeat, "repeat")
 command3 = Command("new tab", "Jarvis", lists.newTab, "newTab")
 command4 = Command("stop running", "Jarvis", lists.stop, "stop")
 command5 = Command("calulate", "Jarvis", lists.calculate, "calculate")
+command6 = Command("search", "Jarvis", lists.search, "search")
 
 try:
     # for testing purposes this is the default API key
