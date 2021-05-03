@@ -32,8 +32,7 @@ def repeat():
     return print(phrase), read_input("What is it sir?:", "list")
 
 def newTab():
-    chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-    webbrowser.get(chrome_path).open('chrome://newtab')
+    webbrowser.open("https://google.com")
     engine.say("I will open a new tab in google sir.")
     engine.runAndWait()
     return print("I will open a new tab in google sir."), read_input("What is it sir?:", "list")
@@ -221,7 +220,3 @@ except sr.UnknownValueError:
 except sr.RequestError as e:
     print("Could not request results from Jarvis's recognition service; {0}".format(e))
     activateVoice("Say something sir: ")
-
-
-
-

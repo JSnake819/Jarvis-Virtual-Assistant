@@ -6,4 +6,3 @@ calculate = ["what is ", "calculate"]
 search = ["search the web for", "search google for", "search for", "search", "look up" ]
 standby = ["go on stand by", "standby", "mute", "pause"]
 exitStandby = ["exit standby", "unmute", "unpause"]
-
