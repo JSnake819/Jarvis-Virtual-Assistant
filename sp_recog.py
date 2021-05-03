@@ -9,6 +9,8 @@ engine.runAndWait()
 
 useVoice = False
 
+standBy = False
+
 # recognize speech using Google Speech Recognition
 user_input = ""
 input_list = []
@@ -92,6 +94,27 @@ def search(phrase):
     print("Ok I will search for " + search)
     return read_input("What is it sir: ", "list")
 
+def standby():
+    global standby
+    standby = True
+    engine.say("Going into standby mode.")
+    engine.runAndWait()
+    print("Going into standby mode.")
+    return read_input("Standing by: ", "list")
+
+def exitStandby():
+    global standby
+    if standby == True:
+        standby = False
+        engine.say("Exiting standby mode.")
+        engine.runAndWait()
+        print("Exiting standby mode.")
+    else:
+        engine.say("I am not in standby mode sir.")
+        engine.runAndWait()
+        print("I am not in standby mode sir.")
+        return read_input("What is it sir: ", "list")
+
 command = ""
 
 def find_command():
@@ -130,6 +153,10 @@ class Command:
                     calculate()
                 if self.function == "search":
                     search(phrase)
+                if self.function == "standby":
+                    standby()
+                if self.function == "exitStandby":
+                    exitStandby()
                 
 def dispatch():
     command1.respond()
@@ -138,6 +165,8 @@ def dispatch():
     command4.respond()
     command5.respond()
     command6.respond()
+    command7.respond()
+    command8.respond()
     read_input("What is it sir: ", "list")
 
 command1 = Command("ask president", "Jarvis", lists.firstPresident, "first_president")
@@ -146,6 +175,8 @@ command3 = Command("new tab", "Jarvis", lists.newTab, "newTab")
 command4 = Command("stop running", "Jarvis", lists.stop, "stop")
 command5 = Command("calulate", "Jarvis", lists.calculate, "calculate")
 command6 = Command("search", "Jarvis", lists.search, "search")
+command7 = Command("stand by", "Jarvis", lists.standby, "standby")
+command8 = Command("exit stand by", "Jarvis", lists.exitStandby, "exitStandby")
 
 try:
     # for testing purposes this is the default API key
